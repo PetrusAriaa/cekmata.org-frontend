@@ -1,0 +1,35 @@
+name: 'Sync Submodules'
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  sync:
+    name: 'Sync Submodules'
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          repository: PetrusAriaa/cekmata.org
+          token: ${{ secrets.CI_TOKEN }}
+          submodules: true
+
+      - name: Git Submodule Update
+        run: |
+          git submodule update --init --recursive
+          git submodule update --recursive --remote
+
+      - name: Commit
+        run : |
+          git config user.email "bot@noreply.github.com"
+          git config user.name "GitHub Actions - submodule update"
+          git add --all
+          git commit -m "submodule update" || echo "No changes to commit"
+          git push
