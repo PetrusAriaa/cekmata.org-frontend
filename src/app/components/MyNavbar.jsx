@@ -1,20 +1,26 @@
-// 'use client'
+'use client'
 import {
   Navbar,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
   Button} from "@nextui-org/react";
-// import { useRouter } from "next/navigation";
 import Link from "next/link"
-// import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
+const paths = ["/", "/checkup", "/dashboard", "/details"]
 
 const MyNavbar = () => {
-  // useEffect(() => {
-  //   console.log(window.location.pathname)
-  // })
+  const [displayNavbar, setDisplayNavbar] = useState(false);
+
+  useEffect(() => {
+    if (paths.includes(window.location.pathname)){
+      setDisplayNavbar(true);
+    }
+  }, [setDisplayNavbar])
 
   return(
+    displayNavbar ?
     <Navbar shouldHideOnScroll className="bg-neutral-50/50 backdrop-blur-sm">
       <NavbarBrand>
         <p className="font-bold text-inherit">cekmata.org</p>
@@ -47,6 +53,8 @@ const MyNavbar = () => {
         </NavbarItem>
       </NavbarContent>
     </Navbar>
+    :
+    null
   )
 }
 
