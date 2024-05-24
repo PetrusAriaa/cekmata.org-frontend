@@ -1,10 +1,14 @@
 'use client'
 import { useState, useEffect, useRef } from "react"
+import {DateInput} from "@nextui-org/date-input";
+import { CalendarDate, parseDate, GregorianCalendar } from "@internationalized/date";
+import {I18nProvider} from '@react-aria/i18n';
+import { CalendarIcon } from "@/components/dashboardUI/CalendarIcon";
 
 const PatientPage = () => {
   const [patientData, setPatientData] = useState({
     name: "",
-    birth: Date.now(),
+    birth: new Date().toISOString(),
     phone: "",
   })
 
@@ -99,7 +103,16 @@ const PatientPage = () => {
           </div>
           <div className="flex flex-row items-center gap-4 w-full justify-between">
             <label htmlFor="tanggalLahir" className="text-sm">Tanggal Lahir</label>
-            <input id="tanggalLahir" name="birth" type="text" className="rounded-lg ring-2 ring-neutral-200 focus:ring-2 focus:ring-blue-500 focus:outline-none w-full max-w-96 px-3 py-1" />
+            <I18nProvider locale="id-ID">
+              <DateInput
+                aria-label="birth date"
+                isRequired
+                defaultValue={parseDate(birth)}
+                endContent={
+                  <CalendarIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+                } 
+                className="max-w-sm" />
+            </I18nProvider>
           </div>
           <div className="flex flex-row items-center gap-4 w-full justify-between">
             <label htmlFor="noTelp" className="text-sm">No. Telepon</label>

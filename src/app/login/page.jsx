@@ -2,9 +2,10 @@
 import { Button, Input } from "@nextui-org/react";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link";
 
-const onLogin = async (authData) => {
+const onLogin = async (authData, router) => {
   const res = await fetch('/api/auth', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -14,12 +15,14 @@ const onLogin = async (authData) => {
     alert('Incorrect password or username')
     return
   }
-  const data = await res.json();
+  router.push('/')
 }
 
 const LoginPage = () => {
   const [isVisible, setIsVisible] = useState(false)
   const [loginData, setLoginData] = useState({ username: "", password: ""})
+
+  const r = useRouter()
 
   const toggleVisibility = () => {
     setIsVisible(!isVisible)
@@ -34,7 +37,7 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    onLogin(loginData)
+    onLogin(loginData, r)
   }
 
   const {username, password} = loginData

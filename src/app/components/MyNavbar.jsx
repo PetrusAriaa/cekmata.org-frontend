@@ -1,4 +1,3 @@
-'use client'
 import {
   Navbar,
   NavbarBrand,
@@ -6,21 +5,10 @@ import {
   NavbarItem,
   Button} from "@nextui-org/react";
 import Link from "next/link"
-import { useEffect, useState } from "react";
-
-const paths = ["/", "/checkup", "/dashboard", "/details", "/patient"]
+import { getCookie } from "@/utils/cookies";
 
 const MyNavbar = () => {
-  const [displayNavbar, setDisplayNavbar] = useState(false);
-
-  useEffect(() => {
-    if (paths.includes(window.location.pathname)){
-      setDisplayNavbar(true);
-    }
-  }, [setDisplayNavbar])
-
   return(
-    displayNavbar ?
     <Navbar shouldHideOnScroll className="bg-neutral-50/50 backdrop-blur-sm">
       <NavbarBrand>
         <p className="font-bold text-inherit">cekmata.org</p>
@@ -48,14 +36,12 @@ const MyNavbar = () => {
         </NavbarItem>
         <NavbarItem>
           <Link href="/login">
-            <Button color="primary">Login</Button>
+            <Button color="danger" variant="ghost">Logout</Button>
           </Link>
         </NavbarItem>
       </NavbarContent>
     </Navbar>
-    :
-    null
-  )
+    )
 }
 
 export default MyNavbar

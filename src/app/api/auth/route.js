@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { setCookie } from "@/utils/cookies";
+import dotenv from "dotenv";
 
+dotenv.config()
 export const POST = async (req) => {
 
   const authData = await req.json()
