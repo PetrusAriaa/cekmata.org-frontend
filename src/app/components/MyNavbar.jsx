@@ -8,7 +8,7 @@ import {
 import Link from "next/link"
 import { useEffect, useState } from "react";
 
-const paths = ["/", "/checkup", "/dashboard", "/details"]
+const paths = ["/", "/checkup", "/dashboard", "/details", "/patient"]
 
 const MyNavbar = () => {
   const [displayNavbar, setDisplayNavbar] = useState(false);
@@ -47,7 +47,7 @@ const MyNavbar = () => {
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link href="#">
+          <Link href="/login">
             <Button color="primary">Login</Button>
           </Link>
         </NavbarItem>

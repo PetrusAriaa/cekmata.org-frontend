@@ -4,18 +4,36 @@ import { IoEye, IoEyeOff } from "react-icons/io5";
 import { useEffect, useState } from "react"
 import Link from "next/link";
 
+const postRegisterData = async (registerData) => {
+  const res = await fetch('/api/users', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(registerData)
+  })
+  if (res.status !== 201) {
+    alert('Failed to register')
+    return
+  }
+  alert('Registration success')
+}
+
 const RegisterPage = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false)
   const [isWarningVisibile, setIsWarningVisibile] = useState(false)
-  const [loginData, setLoginData] = useState({username: "", password: "", confirmPassword: ""})
-  const {username, password, confirmPassword} = loginData
+  const [registerData, setRegisterData] = useState({username: "", password: "", confirmPassword: ""})
+  const {username, password, confirmPassword} = registerData
 
   const handleChange = ({target}) => {
     const {name, value} = target
-    setLoginData({
-      ...loginData, [name]: value
+    setRegisterData({
+      ...registerData, [name]: value
     })
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    postRegisterData(registerData)
   }
 
   useEffect(() => {
@@ -29,7 +47,7 @@ const RegisterPage = () => {
       <h1 className="text-blue-y-500 text-lg font-semibold my-6">CekMata.org</h1>
       <div className="bg-white flex flex-col p-6 gap-10 rounded-2xl shadow-md">
         <h1 className="text-center font-bold text-2xl text-neutral-700">REGISTER</h1>
-        <form className="flex flex-col gap-4">
+        <form className="flex flex-col gap-4" onSubmit={e => handleSubmit(e)}>
           <Input
             label="Username"
             placeholder="Create Username"

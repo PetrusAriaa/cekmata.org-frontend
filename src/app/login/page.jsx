@@ -4,6 +4,19 @@ import { IoEye, IoEyeOff } from "react-icons/io5";
 import { useState } from "react"
 import Link from "next/link";
 
+const onLogin = async (authData) => {
+  const res = await fetch('/api/auth', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(authData)
+  })
+  if (res.status !== 200) {
+    alert('Incorrect password or username')
+    return
+  }
+  const data = await res.json();
+}
+
 const LoginPage = () => {
   const [isVisible, setIsVisible] = useState(false)
   const [loginData, setLoginData] = useState({ username: "", password: ""})
@@ -18,20 +31,26 @@ const LoginPage = () => {
       ...loginData, [name]: value
     })
   }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    onLogin(loginData)
+  }
+
   const {username, password} = loginData
   return (
     <div className="w-full min-h-screen flex flex-col justify-center items-center">
       <h1 className="text-blue-y-500 text-lg font-semibold my-6">CekMata.org</h1>
       <div className="bg-white flex flex-col p-6 gap-10 rounded-2xl shadow-md">
         <h1 className="text-center font-bold text-2xl text-neutral-700">LOGIN</h1>
-        <form className="flex flex-col gap-4">
+        <form className="flex flex-col gap-4" onSubmit={e => handleSubmit(e)}>
           <Input
             label="Username"
             name="username"
             value={username}
             onChange={e => handleChange(e)}
             isRequired
-            type="text" 
+            type="text"
             className="max-w-xs"
           />
           <Input
