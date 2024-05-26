@@ -7,7 +7,6 @@ import {
   DropdownMenu,
   DropdownItem
 } from "@nextui-org/react";
-import { getCookie } from "@/utils/cookies";
 import { toast } from "sonner";
 
 const getActivePatients = async (onFetch) => {
@@ -116,13 +115,11 @@ const CheckupPage = () => {
     const formData = new FormData();
     formData.append('file', file);
 
-    const authToken = await getCookie('TOKEN')
     try {
             const response = await fetch('https://senpro2024-backend-cekmata.azurewebsites.net/api/predict', {
                 method: 'POST',
                 headers: {
                   Accept: 'application/json',
-                  Authorization: 'Bearer ' + authToken?.value
                 },
                 body: formData,
             });
