@@ -36,28 +36,6 @@ const nextConfig = {
         destination: '/login',
         permanent: false
       },
-      {
-        source: '/api/patients',
-        missing: [
-          {
-            type: 'cookie',
-            key: 'TOKEN',
-          }
-        ],
-        destination: '/login',
-        permanent: false
-      },
-      {
-        source: '/api/users',
-        missing: [
-          {
-            type: 'cookie',
-            key: 'TOKEN',
-          }
-        ],
-        destination: '/login',
-        permanent: false
-      }
     ]
   }
 };
