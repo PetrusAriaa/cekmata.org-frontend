@@ -1,6 +1,7 @@
 import { Button, Skeleton } from "@nextui-org/react";
 import DashboardTable from "./components/dashboardUI/DashboardTable";
 import MyNavbar from "@/components/MyNavbar";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -20,8 +21,7 @@ export default function Home() {
                 Ducimus eos mollitia explicabo quo molestias labore aperiam 
                 consequuntur voluptas dolores porro.</p>
               <div className="flex flex-row justify-start gap-2">
-                <Button color="primary" className="font-bold">Check Eye</Button>
-                <Button color="default" className="font-bold">Register</Button>
+                <Button color="primary" className="font-bold" as={Link} href="/patient">Pemeriksaan</Button>
               </div>
             </div>
           </div>

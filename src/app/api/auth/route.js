@@ -1,29 +1,27 @@
 import { NextResponse } from "next/server";
 import { setCookie } from "@/utils/cookies";
 import dotenv from "dotenv";
+import axios from "axios"
 
 dotenv.config()
 export const POST = async (req) => {
-
   const authData = await req.json()
-
-  const res = await fetch(`${process.env.BACKEND_HOST}/auth/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded'},
-    body: `username=${authData.username}&password=${authData.password}`
-  })
-
-  if (res.status !== 200) {
-    return NextResponse.json({detail: res.statusText}, {
-      status: res.status,
-      headers: {
-        'WWW-Authenticate': res.headers.get('www-authenticate')
+  try{
+    const res = await axios.post(`${process.env.BACKEND_HOST}/auth/login`,
+      `username=${authData.username}&password=${authData.password}`,
+      {
+        timeout: 10000,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
       }
-    })
+    )
+    await setCookie('TOKEN', res.data.access_token)
+    return NextResponse.json("Hello")
+  } catch (err) {
+    if (err.response){
+      return NextResponse.json({detail: err.response.data.detail}, {status: err.response.status})
+    }
+    return NextResponse.json({ detail: 'Internal Server Error' }, { status: 500 })
   }
-  const data = await res.json()
-  await setCookie('TOKEN', data.access_token, 60 * 60 * 3)
-  await setCookie('USERNAME', data.username, 60 * 60 * 3)
-
-  return NextResponse.json({status: "success"})
 }

@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Navbar,
   NavbarBrand,
@@ -5,7 +7,11 @@ import {
   NavbarItem,
   Button} from "@nextui-org/react";
 import Link from "next/link"
-import { getCookie } from "@/utils/cookies";
+
+const handleLogout = async () => {
+  await fetch('/api/auth/logout')
+  window.location.reload()
+}
 
 const MyNavbar = () => {
   return(
@@ -20,24 +26,7 @@ const MyNavbar = () => {
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link href="#">
-            Patient Data
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link href="#">
-            Recommendation
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link href="#">
-            Reports
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link href="/login">
-            <Button color="danger" variant="ghost">Logout</Button>
-          </Link>
+          <Button onClick={handleLogout} color="danger" variant="ghost">Logout</Button>
         </NavbarItem>
       </NavbarContent>
     </Navbar>

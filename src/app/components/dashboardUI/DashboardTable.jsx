@@ -6,77 +6,70 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  getKeyValue,
-  Button} from "@nextui-org/react";
-
-const rows = [
-  {
-    patientId: "1",
-    name: "Tony Reichert",
-    role: "CEO",
-    status: "Active",
-    action: <Button variant="light" className="font-bold text-neutral-700">View Details</Button>
-  },
-  {
-    patientId: "2",
-    name: "Zoey Lang",
-    role: "Technical Lead",
-    status: "Paused",
-  },
-  {
-    patientId: "3",
-    name: "Jane Fisher",
-    role: "Senior Developer",
-    status: "Active",
-  },
-  {
-    patientId: "4",
-    name: "William Howard",
-    role: "Community Manager",
-    status: "Vacation",
-  },
-];
+  getKeyValue} from "@nextui-org/react";
+import { useEffect, useState } from "react";
 
 const columns = [
   {
-    key: "patientId",
-    label: "Patient ID",
+    key: "id",
+    label: "Kode Pasien",
+  },
+  {
+    key: "nik",
+    label: "NIK",
   },
   {
     key: "name",
-    label: "Name",
+    label: "Nama Pasien",
   },
   {
-    key: "DOB",
-    label: "DOB",
-  },
-  {
-    key: "eyeCondition",
-    label: "Eye Condition",
-  },
-  {
-    key: "classification",
-    label: "Classification",
-  },
-  {
-    key: "recommendations",
-    label: "Recommendations",
-  },
-  {
-    key: "action",
-    label: "Action",
+    key: "time",
+    label: "Waktu Kunjungan",
   },
 ];
 
+const getPatientData = async (onFetch) => {
+  const { setTodayRecords } = onFetch;
+  const res = await fetch('/api/patients/today')
+  const data = await res.json()
+  if (res.status !== 200) {
+    console.error(data)
+    return
+  }
+  const mappedData = data.data.map((item) => {
+    const date = new Date(item.created_at).toLocaleTimeString('id-ID').split('.')
+    const _date = `${date[0]}:${date[1]}`
+    return {
+      id: item.patient_id,
+      nik: item.nik.toString(),
+      name: item.name.toString(),
+      time: _date,
+    }
+  })
+  setTodayRecords(mappedData)
+}
+
 const DashboardTable = () => {
+
+  const [todayRecords, setTodayRecords] = useState([{
+    id: null,
+    name: 'Loading...',
+    nik: 'Loading...',
+    time: 'Loading...'
+  }])
+
+  useEffect(() => {
+    getPatientData({setTodayRecords})
+  }, [])
+
   return (
-    <Table aria-label="Example table with dynamic content">
+    <Table isStriped aria-label='Daftar Kunjungan Hari ini'>
       <TableHeader columns={columns}>
         {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
       </TableHeader>
-      <TableBody items={rows}>
+      <TableBody emptyContent={"No rows to display."} items={todayRecords}>
         {(item) => (
-          <TableRow key={item.patientId}>
+          <TableRow key={item.id}>
             {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
           </TableRow>
         )}

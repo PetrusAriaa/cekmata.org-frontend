@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Provider from "./provider";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,6 +15,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className + " bg-neutral-50"}>
           <Provider>
+          <Toaster richColors closeButton />
             {children}
           </Provider>
         </body>

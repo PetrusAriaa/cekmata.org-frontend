@@ -1,19 +1,26 @@
 'use client'
-import { Button, Input } from "@nextui-org/react";
+import { Button, Input, Spinner } from "@nextui-org/react";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { Toaster, toast } from 'sonner'
+
 import Link from "next/link";
 
-const onLogin = async (authData, router) => {
+const onLogin = async (authData, router, setLoading) => {
+  setLoading(true)
   const res = await fetch('/api/auth', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(authData)
   })
+  setLoading(false)
+  const data = await res.json()
   if (res.status !== 200) {
-    alert('Incorrect password or username')
-    return
+    toast.error(data.detail)
+  }
+  else {
+    toast.success("Login successful")
   }
   router.push('/')
 }
@@ -21,6 +28,7 @@ const onLogin = async (authData, router) => {
 const LoginPage = () => {
   const [isVisible, setIsVisible] = useState(false)
   const [loginData, setLoginData] = useState({ username: "", password: ""})
+  const [isLoading, setIsLoading] = useState(false)
 
   const r = useRouter()
 
@@ -37,7 +45,7 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    onLogin(loginData, r)
+    onLogin(loginData, r, setIsLoading)
   }
 
   const {username, password} = loginData
@@ -84,7 +92,9 @@ const LoginPage = () => {
             type={isVisible ? "text" : "password"}
             className="max-w-xs"
           />
-          <Button type="submit" color="primary">SUBMIT</Button>
+          <Button type="submit" color="primary">{
+          isLoading ? <Spinner size="sm" color="default" /> : 'SUBMIT'
+          }</Button>
         </form>
       </div>
       <Link href={"/register"} className="my-4 text-sm font-semibold hover:text-blue-x-500 hover:underline">Create Account</Link>

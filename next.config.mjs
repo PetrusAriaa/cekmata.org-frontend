@@ -26,6 +26,17 @@ const nextConfig = {
         permanent: false
       },
       {
+        source: '/patient/checkup',
+        missing: [
+          {
+            type: 'cookie',
+            key: 'TOKEN',
+          }
+        ],
+        destination: '/login',
+        permanent: false
+      },
+      {
         source: '/api/patients',
         missing: [
           {
